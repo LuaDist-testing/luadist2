@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.1)
 
 project(luadist2 C CXX)
-set(luadist2_VERSION 0.3-1)
+set(luadist2_VERSION 0.5-1)
 
 set(ENV{LUA_DIR} ${CMAKE_INSTALL_PREFIX})
 find_package(Lua REQUIRED)
@@ -50,28 +50,30 @@ install(FILES ${dist.utils_SOURCES} DESTINATION ${INSTALL_LMOD}/dist RENAME util
 install(FILES ${dist.downloader_SOURCES} DESTINATION ${INSTALL_LMOD}/dist RENAME downloader.lua)
 install(FILES ${dist.init_SOURCES} DESTINATION ${INSTALL_LMOD}/dist RENAME init.lua)
 install(FILES ${dist.git_SOURCES} DESTINATION ${INSTALL_LMOD}/dist RENAME git.lua)
+install(FILES dist/ordered.lua DESTINATION ${INSTALL_LMOD}/dist)
 
-# 'Detect' platform, this detection is reversed 'rock2cmake_platform' table from
-# https://github.com/LuaDist2/rockspec2cmake/blob/master/rockspec2cmake/CMakeBuilder.lua
-# and can be improved
-if (UNIX)
-    list(APPEND PLATFORM "unix" "linux" "freebsd")
-endif()
+## Platform detection
+# By default use system name
+set(DETECTED_PLATFORM ${CMAKE_SYSTEM_NAME})
+string(TOLOWER ${DETECTED_PLATFORM} DETECTED_PLATFORM)
 
-if (APPLE)
-    list(APPEND PLATFORM "macosx")
-endif()
-
-if (WIN32)
-    list(APPEND PLATFORM "windows" "win32" "mingw32" "msys")
-endif()
-
-if (CYGWIN)
-    list(APPEND PLATFORM "cygwin")
+# Overrides for more specific platforms
+if (DETECTED_PLATFORM STREQUAL "darwin")
+    set(DETECTED_PLATFORM macosx)
+elseif (MINGW)
+    set(DETECTED_PLATFORM mingw32)
+elseif (MSYS)
+    set(DETECTED_PLATFORM msys)
+elseif (CYGWIN)
+    set(DETECTED_PLATFORM cygwin)
+elseif (WIN32)
+    set(DETECTED_PLATFORM win32)
+elseif (UNIX)
+    set(DETECTED_PLATFORM unix)
 endif()
 
 # Convert detected platform into lua array of strings
-string(REPLACE ";" "\", \"" _TMP_PLATFORM "${PLATFORM}")
+string(REPLACE ";" "\", \"" _TMP_PLATFORM "${DETECTED_PLATFORM}")
 string(CONCAT PLATFORM "{\"" "${_TMP_PLATFORM}" "\"}")
 
 # Configure
