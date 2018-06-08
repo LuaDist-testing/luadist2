@@ -1,15 +1,15 @@
 -- This file was automatically generated for the LuaDist project.
 
 package = "luadist2"
-version = "0.2-1"
+version = "0.3-1"
 -- LuaDist source
 source = {
-  tag = "0.2-1",
+  tag = "0.3-1",
   url = "git://github.com/LuaDist-testing/luadist2.git"
 }
 -- Original source
 -- source = {
---     tag = "0.2-1",
+--     tag = "0.3-1",
 --     url = "git://github.com/f4rnham/luadist2.git"
 -- }
 description = {
