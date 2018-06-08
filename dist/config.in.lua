@@ -8,9 +8,8 @@ local log = require "dist.log"
 local pl = require "pl.import_into"()
 
 -- System information ------------------------------------------------
--- FIXME
-version       = "@DIST_VERSION@"   -- Current LuaDist version
-platform      = {"unix", "linux"}
+version       = "@luadist2_VERSION@"
+platform      = @PLATFORM@
 
 -- Directories (relative to root_dir) --------------------------------
 root_dir      = os.getenv("DIST_ROOT") or utils.get_luadist_location() or pl.path.sep
@@ -25,7 +24,7 @@ local_manifest_file = pl.path.join(share_dir, manifest_filename)
 manifest_repos = {
     -- Manually updated core manifest, contains lua, lua-git, zlib packages and
     -- everything other that should not go through LuaRocks management
-    "git://gist.github.com/bb0d974fd060b693bf73d49259db82be.git",
+    "git://github.com/LuaDist-core/manifest.git",
     -- Generated manifest based on LuaRocks packages
     "git://gist.github.com/efe9312e64d0e492282e.git",
 }

@@ -1,15 +1,15 @@
 -- This file was automatically generated for the LuaDist project.
 
 package = "luadist2"
-version = "0.3-1"
+version = "0.4-1"
 -- LuaDist source
 source = {
-  tag = "0.3-1",
+  tag = "0.4-1",
   url = "git://github.com/LuaDist-testing/luadist2.git"
 }
 -- Original source
 -- source = {
---     tag = "0.3-1",
+--     tag = "0.4-1",
 --     url = "git://github.com/f4rnham/luadist2.git"
 -- }
 description = {
@@ -26,16 +26,5 @@ dependencies = {
     "lua-git >= 0.5-1",
 }
 build = {
-    type = "builtin",
-    modules = {
-        ["dist.utils"] = "dist/utils.lua",
-        ["dist.manifest"] = "dist/manifest.lua",
-        ["dist.manager"] = "dist/manager.lua",
-        ["dist.log"] = "dist/log.lua",
-        ["dist.git"] = "dist/git.lua",
-        ["dist.downloader"] = "dist/downloader.lua",
-        ["dist.config"] = "dist/config.lua",
-        ["dist.init"] = "dist/init.lua",
-        ["luadist"] = "luadist.lua",
-    }
+    type = "cmake",
 }

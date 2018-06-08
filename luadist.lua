@@ -166,7 +166,7 @@ Usage: luadist [DEPLOYMENT_DIRECTORY] list [STRINGS...] [-VARIABLES...]
             print("\nInstalled modules:")
             print("==================\n")
             for _, pkg in pairs(deployed) do
-                if utils.name_matches(pkg, strings) then
+                if utils.name_matches(pkg.name, strings) then
                     print("  " .. pkg)
                 end
             end
@@ -204,9 +204,11 @@ Usage: luadist [DEPLOYMENT_DIRECTORY] search [STRINGS...] [-VARIABLES...]
 
             print("\nModules found:")
             print("==============\n")
-            for _, pkg in pairs(manifest) do
-                if utils.name_matches(pkg, strings) then
-                    print("  " .. pkg.name)
+            for name, versions in pairs(manifest.packages) do
+                if utils.name_matches(name, strings) then
+                    for version in pairs(versions) do
+                        print("  " .. name .. " " .. version)
+                    end
                 end
             end
             return 0
@@ -269,8 +271,18 @@ Usage: luadist [DEPLOYMENT_DIRECTORY] info [MODULES...] [-VARIABLES...]
                     print("  License: " .. ((rockspec.description and rockspec.description.license) or "N/A"))
                     print("  Repository url: " .. ((rockspec.source and rockspec.source.url) or "N/A"))
                     print("  Maintainer: " .. ((rockspec.description and rockspec.description.maintainer) or "N/A"))
-                    if rockspec.dependencies then print("  Dependencies: " .. table.concat(rockspec.dependencies, "\n                ")) end
-                    print("  State: " .. (installed[pkg.name] and "installed as version" .. installed[pkg.name] or "not installed"))
+                    if rockspec.dependencies then
+                        print("  Dependencies: " .. table.concat(rockspec.dependencies, "\n                "))
+                    end
+
+                    local installed_version = nil
+                    for _, installed_pkg in pairs(installed) do
+                        if pkg.name == installed_pkg.name then
+                            installed_version = tostring(installed_pkg)
+                        end
+                    end
+
+                    print("  State: " .. (installed_version and "installed as " .. installed_version or "not installed"))
                     print()
                 end
                 return 0

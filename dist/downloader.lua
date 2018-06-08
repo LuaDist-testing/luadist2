@@ -3,6 +3,7 @@ module ("dist.downloader", package.seeall)
 local log = require "dist.log".logger
 local cfg = require "dist.config"
 local git = require "dist.git"
+local ordered = require "dist.ordered"
 local pl = require "pl.import_into"()
 local Package = require "rocksolver.Package"
 
@@ -14,7 +15,7 @@ function fetch_pkgs(packages, download_dir, repo_paths)
     assert(type(download_dir) == "string" and pl.path.isabs(download_dir), "downloader.fetch_pkgs: Argument 'download_dir' is not an absolute path.")
     assert(type(repo_paths) == "table", "downloader.fetch_pkgs: Argument 'repo_paths' is not a table.")
 
-    local fetched_dirs = {}
+    local fetched_dirs = ordered.Ordered()
 
     for _, pkg in pairs(packages) do
         assert(getmetatable(pkg) == Package, "downloader.fetch_pkgs: Argument 'packages' does not contain Package instances.")
@@ -32,7 +33,7 @@ function fetch_pkgs(packages, download_dir, repo_paths)
             return nil, err
         end
 
-        log:info("Downloading '%s'...", pkg)
+        log:info("Downloading '%s'...", tostring(pkg))
 
         -- Search repo_paths for one containing requested package
         local sha = nil
